@@ -1,0 +1,4 @@
+Flask
+Flask-RESTful
+kafka-python
+opencv-contrib-python
