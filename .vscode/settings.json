@@ -1,4 +1,4 @@
 {
   "git.ignoreLimitWarning": true,
-  "python.pythonPath": "server/bin/python3.7"
+  "python.pythonPath": "/Users/yashprit/.virtualenvs/OpenCV-4.1.1-py3/bin/python"
 }

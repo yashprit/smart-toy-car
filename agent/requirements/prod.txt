@@ -1,4 +1,5 @@
 Flask
 Flask-RESTful
 kafka-python
+opencv-python
 opencv-contrib-python

@@ -2,10 +2,13 @@ from flask import Flask, Response, request
 from kafka import KafkaConsumer
 import config
 import requests
+from flask_socketio import SocketIO, emit
 
 server = Flask(__name__)
-
 server.debug = config.DEBUG
+server
+
+socketio = SocketIO(server)
 
 consumer = KafkaConsumer(config.TOPIC, bootstrap_servers = config.KAFKA_BROKERS)
 
@@ -25,17 +28,10 @@ def video_steam():
   result = requests.get(config.CLIENT + "/video?start_video=" + status)
   return result.json()
 
-@server.route('/video', methods=['GET'])
+@socketio.on('video', namespace='/test')
 def video():
-  return Response(
-      get_video_stream(), 
-      mimetype='multipart/x-mixed-replace; boundary=frame')
-
-def get_video_stream():
   for msg in consumer:
-      yield (b'--frame\r\n'
-              b'Content-Type: image/jpg\r\n\r\n' + msg.value + b'\r\n\r\n')
-
+    emit('frame', {'data': msg.value}, broadcast=True)
 
 if __name__ == "__main__":
-  server.run(host=config.HOST, port=config.PORT)
+  socketio.run(server, host=config.HOST, port=config.PORT)
