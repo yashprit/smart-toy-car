@@ -8,5 +8,4 @@ class KafkaAgent(object):
     self.produce = KafkaProducer(bootstrap_servers = kafka_broker)
 
   def send_data(self, json_data):
-    print(self.topic, json_data)
     self.produce.send(self.topic, json_data)

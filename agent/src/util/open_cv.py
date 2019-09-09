@@ -3,6 +3,7 @@ import sys
 import cv2
 import traceback
 import config
+import base64
 from util import global_config
 from .kafka_agent import KafkaAgent
 
@@ -16,7 +17,8 @@ def publish_camera(brokers, topic):
       while(True):
         success, frame = camera.read()
         ret, jpeg = cv2.imencode('.png', frame)
-        producer.send_data(jpeg.tobytes())
+        data = base64.b64encode(jpeg.tobytes())
+        producer.send_data(data)
         time.sleep(0.2)
 
     except cv2.error as e:

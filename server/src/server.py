@@ -6,11 +6,12 @@ from flask_socketio import SocketIO, emit
 
 server = Flask(__name__)
 server.debug = config.DEBUG
-server
 
-socketio = SocketIO(server)
+socketio = SocketIO(server, cors_allowed_origins="*")
 
-consumer = KafkaConsumer(config.TOPIC, bootstrap_servers = config.KAFKA_BROKERS)
+consumer = KafkaConsumer(bootstrap_servers=config.KAFKA_BROKERS, auto_offset_reset='latest')
+
+print(consumer)
 
 @server.route('/api', methods=['GET'])
 def api():
@@ -28,9 +29,12 @@ def video_steam():
   result = requests.get(config.CLIENT + "/video?start_video=" + status)
   return result.json()
 
-@socketio.on('video', namespace='/test')
+@socketio.on('video', namespace='/video')
 def video():
+  print("video")
+  consumer.subscribe(topics=config.TOPIC)
   for msg in consumer:
+    print(msg.value)
     emit('frame', {'data': msg.value}, broadcast=True)
 
 if __name__ == "__main__":

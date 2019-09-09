@@ -3,3 +3,4 @@ Flask-RESTful
 kafka-python
 requests
 flask-socketio
+Flask-CORS
