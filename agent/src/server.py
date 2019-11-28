@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Api
-from resource import VideoResource
+#from resource import VideoResource
 from resource import CommandResource
 import config
 
